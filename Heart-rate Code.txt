@@ -1,0 +1,62 @@
+#include <ESP8266WiFi.h> #include<Wire.h> #include<LiquidCrystal_I2C.h>
+
+String apiWritekey = "UXSFX7XXLPYM0RQN"; //Api write key from thingspeak.com const char* ssid = "AndroidAP358E";
+const char* password = "gngj2397";
+
+const char* server = "api.thingspeak.com"; float resolution=3.3/1023;
+WiFiClient client; LiquidCrystal_I2C lcd(0x27, 16, 2); void setup() { Serial.begin(115200); WiFi.disconnect();
+delay(10);
+
+WiFi.begin(ssid, password); Serial.println(); Serial.println(); Serial.print("Connecting to "); Serial.println(ssid); WiFi.begin(ssid, password);
+while (WiFi.status() != WL_CONNECTED) { delay(500);
+ 
+
+
+
+
+Serial.print(".");
+
+}
+
+Serial.println("");
+
+Serial.print("NodeMcu connected to wifi..."); Serial.println(ssid);
+Serial.println(); Serial.begin(115200); Wire.begin(D2,D1); lcd.init();
+lcd.home();
+
+lcd.backlight(); // Enable or Turn On the backlight
+
+}
+
+void loop() {
+
+int heartValue = (analogRead(A0)/10); if (heartValue>40 && heartValue<90)
+{
+
+//int heartValue = (analogRead(A0)/10); if (client.connect(server,80)) {
+String tsData = apiWritekey; tsData +="&field2=";
+tsData += String(heartValue); tsData += "\r\n\r\n";
+
+client.print("POST /update HTTP/1.1\n"); client.print("Host: api.thingspeak.com\n"); client.print("Connection: close\n");
+client.print("X-THINGSPEAKAPIKEY: "+apiWritekey+"\n");
+ 
+
+
+
+
+client.print("Content-Type: application/x-www-form-urlencoded\n"); client.print("Content-Length: ");
+client.print(tsData.length()); client.print("\n\n"); client.print(tsData);
+Serial.println("uploading to thingspeak"); Serial.println(heartValue); //printing the value tot the serial plotter lcd.setCursor(0,0);
+// delay(500); lcd.print("BPM="); lcd.print(heartValue); delay(500);
+//lcd.setCursor(0,5); lcd.print("	");
+}
+
+/*Serial.print("Temperature: "); Serial.print(temp);
+Serial.println("uploaded to Thingspeak server	");*/
+
+}
+
+client.stop();
+
+Serial.println("Waiting to upload next reading..."); Serial.println();
+}
