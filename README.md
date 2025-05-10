@@ -37,7 +37,7 @@ The pulse sensor has two sides. On one side the LED is placed along with an ambi
 Now the LED emits light which will fall on the vein directly. The veins will have blood flow inside them only when the heart is pumping, so if we monitor the flow of blood, we can monitor the heartbeats as well. If the flow of blood is detected then the ambient light sensor will pick up more light since it will be reflected by the blood, this minor change in received light is analyzed over time to determine our heartbeats.
 
 # Result
-![graph](https://www.linkpicture.com/q/Screenshot-2023-05-03-202528.png)
+![graph](https://i.imgur.com/H8jOpSP.png)
 
 
 
